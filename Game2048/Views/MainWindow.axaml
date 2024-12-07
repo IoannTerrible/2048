@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Game2048.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="550"
+        x:Class="Game2048.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="2048 Game"
+        Width="400" Height="550"
+        Background="#faf8ef">
+
+    <Design.DataContext>
+        <vm:MainViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Button.tile">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="CornerRadius" Value="3"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Styles>
+
+    <Window.KeyBindings>
+        <KeyBinding Gesture="Up" Command="{Binding MoveCommand}" CommandParameter="Up"/>
+        <KeyBinding Gesture="Down" Command="{Binding MoveCommand}" CommandParameter="Down"/>
+        <KeyBinding Gesture="Left" Command="{Binding MoveCommand}" CommandParameter="Left"/>
+        <KeyBinding Gesture="Right" Command="{Binding MoveCommand}" CommandParameter="Right"/>
+    </Window.KeyBindings>
+
+    <Grid RowDefinitions="Auto,Auto,*" Margin="20">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+            <StackPanel>
+                <TextBlock Text="2048" FontSize="48" FontWeight="Bold" Foreground="#776e65"/>
+                <TextBlock Text="Join the tiles, get to 2048!" FontSize="16" Foreground="#776e65"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="10">
+                <Border Background="#bbada0" CornerRadius="3" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="SCORE" FontSize="12" Foreground="#eee4da" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Score}" FontSize="20" Foreground="White" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Button Content="New Game" 
+                        Command="{Binding NewGameCommand}"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Stretch"
+                        Background="#8f7a66"
+                        Foreground="White"/>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1" 
+                   Text="{Binding GameStatus}" 
+                   FontSize="20" 
+                   FontWeight="Bold"
+                   Foreground="#776e65"
+                   HorizontalAlignment="Center"
+                   Margin="0,10"/>
+
+        <Border Grid.Row="2" 
+                Background="#bbada0" 
+                CornerRadius="6" 
+                Padding="10"
+                Margin="0,10">
+            <ItemsControl ItemsSource="{Binding Tiles}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="4" Columns="4"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Classes="tile"
+                                Background="{Binding Background}"
+                                Foreground="{Binding Foreground}"
+                                Content="{Binding DisplayValue}"
+                                IsEnabled="False"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Grid>
+</Window>
